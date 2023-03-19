@@ -18,22 +18,18 @@ $(function () {
   // Compare the real-time current hour at the time of viewing the webpage with the time block on the planner. If in the past, apply the "past" class. If the present hour, apply the "present" class. If in the future, apply the "future" class.
 
   timeClearEl.each(function () {
-    let realTimeHour = parseInt($(this).attr("id").split("hour-")[1]);
+    let today = moment().format("dddd, MMMM D, YYYY");
 
-    if (realTimeHour < currentHour) {
-      $(this).removeClass("future");
-      $(this).removeClass("present");
-      $(this).addClass("past");
-    } else if (realTimeHour === currentHour) {
-      $(this).removeClass("past");
-      $(this).removeClass("future");
-      $(this).addClass("present");
-    } else {
-      $(this).removeClass("present");
-      $(this).removeClass("past");
-      $(this).addClass("future");
-    }
-  });
+    if (moment().isAfter(moment().hour(timeBlock[0]))) {
+      colorBox.addClass("past");
+  }
+  else if (moment().isBefore(moment().hour(timeBlock[0]))) {
+      colorBox.addClass("future");
+  }
+  else if (moment().isSame(moment().hour(timeBlock[0]))) {
+      colorBox.addClass("present");
+  }   
+});
 
   // retrieve from local storage & display
 
@@ -42,8 +38,6 @@ $(function () {
     let keyInput = $(this).attr("id");
     $(ids).children().val(localStorage.getItem(keyInput));
   });
-
-  // indicates input was successfully saved 
   
   function init() {
     renderMessage();
